@@ -11,7 +11,7 @@ def clean_data(path):
 def longestStreak(data):
     longestStreak = 0
     streak = 0
-    
+
     data['timestamp'] = pd.to_datetime(data['timestamp'], format='ISO8601', errors='coerce')
     data['date'] = pd.to_datetime(data['timestamp']).dt.date
 
@@ -42,8 +42,15 @@ def longestStreak(data):
 
 
 def monthWiseActivity(data):
+    data['timestamp'] = pd.to_datetime(data['timestamp'], format='ISO8601', errors='coerce')
+    data['month'] = pd.to_datetime(data['timestamp']).dt.to_period('M')
+    month_wise_activity = data.groupby('month').size()
+    print(month_wise_activity)
+
+def allDeveloperActivity(data):
     return None
-def developerActivity(data):
+
+def mostActiveDeveloper(data):
     return None
 
 def main():
@@ -52,7 +59,8 @@ def main():
     data=pd.read_csv("clean_data.csv")
     longestStreak(data)
     monthWiseActivity(data)
-    developerActivity(data)
+    allDeveloperActivity(data)
+    mostActiveDeveloper(data)
 
 
 if __name__ == "__main__":  
