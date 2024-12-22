@@ -48,7 +48,21 @@ def monthWiseActivity(data):
     print(month_wise_activity)
 
 def allDeveloperActivity(data):
-    return None
+    developer_activity = {}
+
+    data['embeds.0.author.url'] = data['embeds.0.author.url'].fillna('')
+    
+    for url in data['embeds.0.author.url']:
+        if url != '':
+            dev_name = url.split('/')[-1]
+            if dev_name in developer_activity:
+                developer_activity[dev_name] += 1
+            else:
+                developer_activity[dev_name] = 1
+
+    developer_activity = dict(sorted(developer_activity.items(), key=lambda item: item[1], reverse=True))
+    for key, value in developer_activity.items():
+        print(f"{key}: {value}")
 
 def mostActiveDeveloper(data):
     return None
