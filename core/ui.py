@@ -3,10 +3,10 @@ import pandas as pd
 import plotly.express as px
 import time
 from main import clean_data, totalActiveDays, longestGap, busiestDay, longestStreak, monthWiseActivity, timeWiseActivity, allDeveloperActivity, repoActivity
-import yaml
-from yaml.loader import SafeLoader
-import streamlit_authenticator as stauth
-import re
+# import yaml
+# from yaml.loader import SafeLoader
+# import streamlit_authenticator as stauth
+# import re
 
 # # Streamlit UI
 # st.set_page_config(page_title="GDGVIT Github Wrapped 2024", layout="wide")
