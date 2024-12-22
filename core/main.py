@@ -204,7 +204,7 @@ def repoActivity(data):
                 else:
                     repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 1, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
                                                'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
-            elif ('GitHub Actions checks success' in title or 'commitlint success' in title or 'deploy-main success' in title or 'Deployed successfully' in title or 'create_commit success' in title):
+            elif ('GitHub Actions checks success' in title or 'commitlint success' in title or 'deploy-main success' in title or 'Deployed successfully' in title or 'create_commit success' in title or 'Lint Code Base success' in title):
                 actions_success += 1
                 repoName = title[1:title.index(']')]
                 if repoName in repo_activity:
@@ -212,7 +212,7 @@ def repoActivity(data):
                 else:
                     repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
                                                'branches': 0, 'forks': 0, 'actions_success': 1, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
-            elif ('GitHub Actions checks failure' in title or 'commitlint failure' in title or 'deploy-main failure' in title or 'Deploy failed' in title or 'Deploy failure' in title):
+            elif ('GitHub Actions checks failure' in title or 'commitlint failure' in title or 'deploy-main failure' in title or 'Deploy failed' in title or 'Deploy failure' in title or 'Lint Code Base failure' in title):
                 action_failures += 1
                 # here repo name is <name>
                 repoName = title[1:title.index(']')]
