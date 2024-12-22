@@ -4,3 +4,6 @@ clean_data.csv
 .vscode
 activity_over_days.png
 core/test.py
+.streamlit
+config.yaml
+core/__pycache__
