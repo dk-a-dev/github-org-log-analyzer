@@ -8,6 +8,50 @@ def clean_data(path):
     data.drop(cols_to_drop, axis=1, inplace=True)
     return data
 
+def totalActiveDays(data):
+    data['timestamp'] = pd.to_datetime(data['timestamp'], format='ISO8601', errors='coerce')
+    data['date'] = pd.to_datetime(data['timestamp']).dt.date
+
+    data = data.dropna(subset=['date'])
+    unique_dates = data['date'].unique()
+    print(f"Total Active Days: {len(unique_dates)}")
+
+def longestGap(data):
+    longestGap = 0
+    gap = 0
+    start_date = None
+    end_date = None
+
+    data['timestamp'] = pd.to_datetime(data['timestamp'], format='ISO8601', errors='coerce')
+    data['date'] = pd.to_datetime(data['timestamp']).dt.date
+
+    data = data.dropna(subset=['date'])
+    unique_dates = sorted(data['date'].unique())
+
+    for i in range(1, len(unique_dates)):
+        current_gap = (unique_dates[i] - unique_dates[i - 1]).days - 1
+        if current_gap > 0:
+            gap = current_gap
+            if gap > longestGap:
+                longestGap = gap
+                start_date = unique_dates[i - 1]
+                end_date = unique_dates[i]
+        else:
+            gap = 0
+
+    print(f"Longest Gap: {longestGap}")
+    print(f"Start Date: {start_date}")
+    print(f"End Date: {end_date}")
+
+
+def busiestDay(data):
+    data['timestamp'] = pd.to_datetime(data['timestamp'], format='ISO8601', errors='coerce')
+    data['date'] = pd.to_datetime(data['timestamp']).dt.date
+    busiest_day = data['date'].value_counts().idxmax()
+    busiest_day_count = data['date'].value_counts().max()
+    print(f"Busiest Day: {busiest_day}")
+    print(f"Total Messages: {busiest_day_count}")
+
 def longestStreak(data):
     longestStreak = 0
     streak = 0
@@ -71,16 +115,19 @@ def allDeveloperActivity(data):
         print(f"{key}: {value}")
     print("Most Active Developer: ", list(developer_activity.keys())[0])
 
+            
 def main():
     # data=clean_data("data.csv")
     # data.to_csv("clean_data.csv",index=False)
     data=pd.read_csv("clean_data.csv")
     # longestStreak(data)
     # monthWiseActivity(data)
-    timeWiseActivity(data)
+    # totalActiveDays(data)
+    # longestGap(data)
+    # busiestDay(data)
+    # timeWiseActivity(data)
     # allDeveloperActivity(data)
     
-
 
 if __name__ == "__main__":  
     main()
