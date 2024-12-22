@@ -32,7 +32,7 @@ def longestGap(data):
         data['timestamp'], format='ISO8601', errors='coerce')
     data['date'] = pd.to_datetime(data['timestamp']).dt.date
 
-    data = data.dropna(subset=['date'])
+    data = data.dropna(subset(['date']))
     unique_dates = sorted(data['date'].unique())
 
     for i in range(1, len(unique_dates)):
@@ -136,7 +136,7 @@ def allDeveloperActivity(data):
 def repoActivity(data):
     repo_activity = {}
     data['embeds.0.title'] = data['embeds.0.title'].fillna('')
-    stars, issues_opened, issues_resolved, pull_requests, commits, branches, forks, actions, new_collaborator, comments = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    stars, issues_opened, issues_resolved, pr_opened, pr_closed, commits, branches, forks, actions_success, action_failures, new_collaborator, comments = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     for title in data['embeds.0.title']:
         if title != '':
             if ('New star added' in title):
@@ -145,48 +145,48 @@ def repoActivity(data):
                 if repoName in repo_activity:
                     repo_activity[repoName]['stars'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 1, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
-                                               'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 0}
+                    repo_activity[repoName] = {'stars': 1, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
             elif ('New collaborator added' in title):
                 new_collaborator += 1
                 repoName = title.split(']')[0].split('/')[1]
                 if repoName in repo_activity:
                     repo_activity[repoName]['new_collaborator'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
-                                               'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 1, 'comments': 0}
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 1, 'comments': 0}
             elif ('New branch created' in title):
                 branches += 1
                 repoName = title.split(']')[0].split('/')[1]
                 if repoName in repo_activity:
                     repo_activity[repoName]['branches'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
-                                               'branches': 1, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 0}
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 1, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
             elif ('New comment on' in title):
                 comments += 1
                 repoName = title.split(']')[0].split('/')[1]
                 if repoName in repo_activity:
                     repo_activity[repoName]['comments'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
-                                               'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 1}
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 1}
             elif ('New review comment' in title):
                 comments += 1
                 repoName = title.split(']')[0].split('/')[1]
                 if repoName in repo_activity:
                     repo_activity[repoName]['comments'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
-                                               'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 1}
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 1}
             elif ('Fork created' in title):
                 forks += 1
                 repoName = title.split(']')[0].split('/')[1]
                 if repoName in repo_activity:
                     repo_activity[repoName]['forks'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
-                                               'branches': 0, 'forks': 1, 'actions': 0, 'new_collaborator': 0, 'comments': 0}
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 1, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
 
             elif ('Issue opened' in title):
                 issues_opened += 1
@@ -194,17 +194,60 @@ def repoActivity(data):
                 if repoName in repo_activity:
                     repo_activity[repoName]['issues_opened'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 1, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
-                                               'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 0}
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 1, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
             elif ('Issue closed' in title):
                 issues_resolved += 1
                 repoName = title.split(']')[0].split('/')[1]
                 if repoName in repo_activity:
                     repo_activity[repoName]['issues_resolved'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 1, 'pull_requests': 0, 'commits': 0,
-                                               'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 0}
-    # print in form of table
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 1, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
+            elif ('GitHub Actions checks success' in title or 'commitlint success' in title or 'deploy-main success' in title or 'Deployed successfully' in title or 'create_commit success' in title):
+                actions_success += 1
+                repoName = title[1:title.index(']')]
+                if repoName in repo_activity:
+                    repo_activity[repoName]['actions_success'] += 1
+                else:
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions_success': 1, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
+            elif ('GitHub Actions checks failure' in title or 'commitlint failure' in title or 'deploy-main failure' in title or 'Deploy failed' in title or 'Deploy failure' in title):
+                action_failures += 1
+                # here repo name is <name>
+                repoName = title[1:title.index(']')]
+                if repoName in repo_activity:
+                    repo_activity[repoName]['action_failures'] += 1
+                else:
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 1, 'new_collaborator': 0, 'comments': 0}
+            elif ('Pull request opened' in title):
+                pr_opened += 1
+                repoName = title.split(']')[0].split('/')[1]
+                if repoName in repo_activity:
+                    repo_activity[repoName]['pr_opened'] += 1
+                else:
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 1, 'pr_closed': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
+            elif ('Pull request closed' in title):
+                pr_closed += 1
+                repoName = title.split(']')[0].split('/')[1]
+                if repoName in repo_activity:
+                    repo_activity[repoName]['pr_closed'] += 1
+                else:
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 1, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
+
+            elif ('new commit' in title):
+                repoName = title[1:].split(':')[0]
+                val = int(title.split(' ')[1])
+                commits += val
+                if repoName in repo_activity:
+                    repo_activity[repoName]['commits'] += val
+                else:
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pr_opened': 0, 'pr_closed': 0, 'commits': val,
+                                               'branches': 0, 'forks': 0, 'actions_success': 0, 'action_failures': 0, 'new_collaborator': 0, 'comments': 0}
+                    
     print("Repository Activity")
     print("RepoName   Stars Issues PRs Commits Branches Forks Actions collab comments")
     c = 0
@@ -216,23 +259,15 @@ def repoActivity(data):
     print(f"Stars: {stars}")
     print(f"Issues Opened: {issues_opened}")
     print(f"Issues Resolved: {issues_resolved}")
-    print(f"Pull Requests: {pull_requests}")
+    print(f"Pull Requests Opened: {pr_opened}")
+    print(f"Pull Requests Closed: {pr_closed}")
     print(f"Commits: {commits}")
     print(f"Branches: {branches}")
     print(f"Forks: {forks}")
-    print(f"Actions: {actions}")
+    print(f"Actions: {actions_success}")
+    print(f"Action Failures: {action_failures}")
     print(f"New Collaborator: {new_collaborator}")
     print(f"Comments: {comments}")
-    # Star added
-    # Issue opened
-    # Issue closed
-    # New branch created
-    # New collaborator added
-    # New comment on New review
-
-    # Pull request opened
-    # Pull request closed
-
 
 def main():
     # data=clean_data("data.csv")
