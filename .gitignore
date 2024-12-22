@@ -2,3 +2,5 @@ venv
 data.csv
 clean_data.csv
 .vscode
+activity_over_days.png
+core/test.py
