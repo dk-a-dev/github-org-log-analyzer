@@ -40,12 +40,18 @@ def longestStreak(data):
     print(f"Start Date: {start_date}")
     print(f"End Date: {end_date}")
 
-
 def monthWiseActivity(data):
     data['timestamp'] = pd.to_datetime(data['timestamp'], format='ISO8601', errors='coerce')
     data['month'] = pd.to_datetime(data['timestamp']).dt.to_period('M')
     month_wise_activity = data.groupby('month').size()
     print(month_wise_activity)
+
+def timeWiseActivity(data):
+    data['timestamp'] = pd.to_datetime(data['timestamp'], format='ISO8601', errors='coerce')
+    data['hour'] = pd.to_datetime(data['timestamp']).dt.hour
+    time_wise_activity = data.groupby('hour').size()
+    time_wise_activity = time_wise_activity.groupby(pd.cut(time_wise_activity.index, np.arange(0, 25, 4))).sum()
+    print(time_wise_activity)
 
 def allDeveloperActivity(data):
     developer_activity = {}
@@ -63,18 +69,17 @@ def allDeveloperActivity(data):
     developer_activity = dict(sorted(developer_activity.items(), key=lambda item: item[1], reverse=True))
     for key, value in developer_activity.items():
         print(f"{key}: {value}")
-
-def mostActiveDeveloper(data):
-    return None
+    print("Most Active Developer: ", list(developer_activity.keys())[0])
 
 def main():
     # data=clean_data("data.csv")
     # data.to_csv("clean_data.csv",index=False)
     data=pd.read_csv("clean_data.csv")
-    longestStreak(data)
-    monthWiseActivity(data)
-    allDeveloperActivity(data)
-    mostActiveDeveloper(data)
+    # longestStreak(data)
+    # monthWiseActivity(data)
+    timeWiseActivity(data)
+    # allDeveloperActivity(data)
+    
 
 
 if __name__ == "__main__":  
