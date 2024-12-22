@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+
 def clean_data(path):
     data = pd.read_csv(path)
     data.drop(["author.bot", "author.avatar", "author.discriminator", "author.global_name", "author.id", "author.username", "call", "channel_id", "components", "content", "edited_timestamp", "embeds.0.author.icon_url", "embeds.0.author.proxy_icon_url", "embeds.0.color", "embeds.0.content_scan_version", "embeds.0.type",
@@ -135,16 +136,16 @@ def allDeveloperActivity(data):
 def repoActivity(data):
     repo_activity = {}
     data['embeds.0.title'] = data['embeds.0.title'].fillna('')
-    stars, issues, pull_requests, commits, branches, forks, actions, new_collaborator, comments = 0, 0, 0, 0, 0, 0, 0, 0, 0
+    stars, issues_opened, issues_resolved, pull_requests, commits, branches, forks, actions, new_collaborator, comments = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     for title in data['embeds.0.title']:
         if title != '':
-            if (' star added' in title):
+            if ('New star added' in title):
                 stars += 1
                 repoName = title.split(']')[0].split('/')[1]
                 if repoName in repo_activity:
                     repo_activity[repoName]['stars'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 1, 'issues': 0, 'pull_requests': 0, 'commits': 0,
+                    repo_activity[repoName] = {'stars': 1, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
                                                'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 0}
             elif ('New collaborator added' in title):
                 new_collaborator += 1
@@ -152,7 +153,7 @@ def repoActivity(data):
                 if repoName in repo_activity:
                     repo_activity[repoName]['new_collaborator'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues': 0, 'pull_requests': 0, 'commits': 0,
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
                                                'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 1, 'comments': 0}
             elif ('New branch created' in title):
                 branches += 1
@@ -160,35 +161,61 @@ def repoActivity(data):
                 if repoName in repo_activity:
                     repo_activity[repoName]['branches'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues': 0, 'pull_requests': 0, 'commits': 0,
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
                                                'branches': 1, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 0}
-            elif (('New comment on') in title):
+            elif ('New comment on' in title):
                 comments += 1
                 repoName = title.split(']')[0].split('/')[1]
                 if repoName in repo_activity:
                     repo_activity[repoName]['comments'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues': 0, 'pull_requests': 0, 'commits': 0,
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
                                                'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 1}
-            elif (('New review comment') in title):
+            elif ('New review comment' in title):
                 comments += 1
                 repoName = title.split(']')[0].split('/')[1]
                 if repoName in repo_activity:
                     repo_activity[repoName]['comments'] += 1
                 else:
-                    repo_activity[repoName] = {'stars': 0, 'issues': 0, 'pull_requests': 0, 'commits': 0,
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
                                                'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 1}
+            elif ('Fork created' in title):
+                forks += 1
+                repoName = title.split(']')[0].split('/')[1]
+                if repoName in repo_activity:
+                    repo_activity[repoName]['forks'] += 1
+                else:
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 1, 'actions': 0, 'new_collaborator': 0, 'comments': 0}
+
+            elif ('Issue opened' in title):
+                issues_opened += 1
+                repoName = title.split(']')[0].split('/')[1]
+                if repoName in repo_activity:
+                    repo_activity[repoName]['issues_opened'] += 1
+                else:
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 1, 'issues_resolved': 0, 'pull_requests': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 0}
+            elif ('Issue closed' in title):
+                issues_resolved += 1
+                repoName = title.split(']')[0].split('/')[1]
+                if repoName in repo_activity:
+                    repo_activity[repoName]['issues_resolved'] += 1
+                else:
+                    repo_activity[repoName] = {'stars': 0, 'issues_opened': 0, 'issues_resolved': 1, 'pull_requests': 0, 'commits': 0,
+                                               'branches': 0, 'forks': 0, 'actions': 0, 'new_collaborator': 0, 'comments': 0}
     # print in form of table
     print("Repository Activity")
     print("RepoName   Stars Issues PRs Commits Branches Forks Actions collab comments")
-    c=0
+    c = 0
     for key, value in repo_activity.items():
-        c+=1
+        c += 1
         print(f"{c}: {key},{value}")
     print("Total Activity")
     print(f"Number of repositories", len(repo_activity.keys()))
     print(f"Stars: {stars}")
-    print(f"Issues: {issues}")
+    print(f"Issues Opened: {issues_opened}")
+    print(f"Issues Resolved: {issues_resolved}")
     print(f"Pull Requests: {pull_requests}")
     print(f"Commits: {commits}")
     print(f"Branches: {branches}")
