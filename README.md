@@ -30,8 +30,8 @@ A GitHub Org Data Analyzer is a tool designed to analyze GitHub activity data. I
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/your-username/github-data-analyzer.git
-    cd github-data-analyzer
+    git clone https://github.com/dk-a-dev/github-org-wrapped-gen.git
+    cd github-org-wrapped-gen
     ```
 
 2. Install the required packages:
